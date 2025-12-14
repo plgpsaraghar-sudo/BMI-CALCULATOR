@@ -1,0 +1,744 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AASRAA TRUST - BMI Chart & Calculator | GPS Aaraghar Dehradun</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lora', serif;
+      line-height: 1.8;
+      color: #253238;
+      background: radial-gradient(circle at top, #e0f7fa 0%, #fce4ec 40%, #f3e5f5 100%);
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #00bcd4 0%, #42a5f5 40%, #7e57c2 100%);
+      color: #e3f2fd;
+      text-align: center;
+      padding: 80px 20px 60px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+    }
+
+    .logo {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.7rem, 8vw, 4.6rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffeb3b, #ff9800, #ff4081);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      letter-spacing: 1.5px;
+    }
+
+    .subheading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #e1f5fe;
+      margin-bottom: 15px;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    }
+
+    header p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      max-width: 650px;
+      margin: 0 auto 20px;
+      color: #e3f2fd;
+    }
+
+    /* Navigation */
+    nav {
+      background: linear-gradient(90deg, rgba(255,255,255,0.98), rgba(232,245,253,0.98));
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid #ff6f00;
+      padding: 0.9rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    nav a {
+      color: #283593;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      background: linear-gradient(135deg, #ff9800, #ff4081);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transform: translateY(-1px);
+    }
+
+    /* BMI Section */
+    .bmi-section {
+      background: rgba(255,255,255,0.97);
+      border-radius: 26px;
+      margin: 40px auto;
+      padding: 40px 35px;
+      max-width: 1100px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.16);
+      border: 1px solid rgba(144,164,174,0.25);
+    }
+
+    .calculator-container {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .calculator-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-form {
+      background: linear-gradient(145deg, #e8f5e9 0%, #f1f8e9 35%, #fffde7 100%);
+      padding: 24px 22px 26px;
+      border-radius: 20px;
+      border: 2px solid #66bb6a;
+      box-shadow: 0 8px 22px rgba(76,175,80,0.25);
+    }
+
+    .input-form h3 {
+      color: #1b5e20;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .height-group {
+      position: relative;
+      margin: 8px 0;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 11px 12px;
+      margin: 7px 0;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      font-size: 0.98rem;
+      outline: none;
+      transition: all 0.25s ease;
+      background: #ffffff;
+    }
+
+    input:focus, select:focus {
+      border-color: #43a047;
+      box-shadow: 0 0 0 3px rgba(129,199,132,0.4);
+    }
+
+    .height-unit-toggle {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .unit-btn {
+      flex: 1;
+      padding: 8px;
+      border: 2px solid #a5d6a7;
+      background: #f1f8e9;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #2e7d32;
+      transition: all 0.25s ease;
+    }
+
+    .unit-btn.active {
+      background: linear-gradient(135deg, #43a047, #66bb6a);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(56,142,60,0.4);
+    }
+
+    .height-display {
+      background: #e8f5e9;
+      padding: 8px 10px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      color: #1b5e20;
+      margin-top: 7px;
+      font-size: 0.98rem;
+      border: 1px dashed #81c784;
+    }
+
+    button {
+      background: linear-gradient(135deg, #43a047, #66bb6a);
+      color: white;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.03em;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(56,142,60,0.4);
+    }
+
+    #result {
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      padding: 18px 16px;
+      border-radius: 14px;
+      border-left: 6px solid #ff9800;
+      margin-top: 15px;
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: #4e342e;
+      box-shadow: 0 5px 15px rgba(255,152,0,0.35);
+    }
+
+    /* Tables – boys upar, girls neeche */
+    .tables-container {
+      margin-top: 35px;
+      display: block;
+    }
+
+    .bmi-table {
+      background: linear-gradient(160deg, #ffffff 0%, #e3f2fd 50%, #fce4ec 100%);
+      padding: 22px 20px 24px;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      border: 1px solid rgba(144,164,174,0.3);
+      max-width: 100%;
+      margin: 0 auto 28px auto;
+    }
+
+    .bmi-table h3 {
+      text-align: center;
+      color: #283593;
+      margin-bottom: 18px;
+      font-family: 'Cinzel', serif;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 14px;
+      table-layout: fixed;
+    }
+
+    th {
+      background: linear-gradient(135deg, #42a5f5, #7e57c2);
+      color: white;
+      padding: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 11px 10px;
+      text-align: center;
+      border-bottom: 1px solid rgba(144,164,174,0.35);
+      font-size: 0.95rem;
+      word-wrap: break-word;
+    }
+
+    tr:nth-child(even) td {
+      background-color: rgba(227,242,253,0.45);
+    }
+
+    .age { background: #e8f5e9; font-weight: 700; color: #1b5e20; }
+
+    .underweight { background-color: #e1f5fe; color: #0277bd; font-weight: 700; }
+    .healthy { background-color: #e8f5e9; color: #2e7d32; font-weight: 700; }
+    .overweight { background-color: #fff3e0; color: #ef6c00; font-weight: 700; }
+    .obese { background-color: #ffebee; color: #c62828; font-weight: 700; }
+
+    @media (max-width: 768px) {
+      td, th {
+        font-size: 0.85rem;
+        padding: 8px 6px;
+      }
+    }
+
+    /* Chart */
+    .chart-container {
+      background: linear-gradient(145deg, #ffffff 0%, #e3f2fd 50%, #ede7f6 100%);
+      padding: 22px 20px 24px;
+      border-radius: 20px;
+      margin-top: 4px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+      border: 1px solid rgba(144,164,174,0.3);
+    }
+
+    .chart-container h3 {
+      text-align: center;
+      color: #283593;
+      margin-bottom: 10px;
+    }
+
+    /* Credits */
+    .credits-section {
+      background: linear-gradient(135deg, #fff3e0, #ffecb3);
+      padding: 60px 20px;
+      border-top: 5px solid #ff9800;
+      border-bottom: 5px solid #ff9800;
+    }
+
+    .credits {
+      background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(255,248,225,0.96));
+      padding: 40px 30px;
+      border-radius: 22px;
+      text-align: center;
+      border: 3px solid #ff9800;
+      box-shadow: 0 16px 40px rgba(255,160,0,0.45);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .credits h2 {
+      color: #bf360c;
+      font-family: 'Cinzel', serif;
+      font-size: 2.15rem;
+      margin-bottom: 18px;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+
+    .credits h3 {
+      color: #e65100;
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      margin-bottom: 22px;
+      font-weight: 700;
+    }
+
+    .highlight-credit {
+      background: linear-gradient(135deg, #fff59d, #ffeb3b);
+      padding: 13px 20px;
+      margin: 12px 0;
+      border-radius: 14px;
+      border-left: 6px solid #ff6f00;
+      box-shadow: 0 7px 18px rgba(255,214,0,0.55);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #4e342e;
+    }
+
+    .students-list {
+      background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+      border-left: 6px solid #2e7d32;
+      box-shadow: 0 7px 18px rgba(129,199,132,0.55);
+    }
+
+    /* Generic sections */
+    section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: #283593;
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      width: 90px;
+      height: 4px;
+      background: linear-gradient(90deg, #ff9800, #ff4081);
+      margin: 14px auto 0;
+      border-radius: 999px;
+    }
+
+    #about, #mission, #contact {
+      background: rgba(255,255,255,0.97);
+      border-radius: 24px;
+      padding: 40px 35px;
+      margin: 32px auto;
+      max-width: 900px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.14);
+      border: 1px solid rgba(144,164,174,0.3);
+    }
+
+    footer {
+      background: linear-gradient(135deg, #1a237e, #3949ab);
+      color: white;
+      text-align: center;
+      padding: 26px 20px;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">AASRAA TRUST</h1>
+    <div class="subheading">GPS Araghar Dehradun | Gyan Mathan Mela 2025</div>
+    <p>
+      <i class="fas fa-heart" style="color: #ffeb3b; margin-right: 15px;"></i>
+      Children BMI Chart & Calculator | Healthy Growth Tracking
+    </p>
+  </header>
+
+  <nav>
+    <a href="#bmi-calculator"><i class="fas fa-calculator"></i>BMI Calculator</a>
+    <a href="#about"><i class="fas fa-info-circle"></i>About</a>
+    <a href="#mission"><i class="fas fa-bullseye"></i>Mission</a>
+    <a href="#contact"><i class="fas fa-envelope"></i>Contact</a>
+  </nav>
+
+  <!-- Credits Section -->
+  <section class="credits-section">
+    <div class="credits">
+      <h2>🏆 GYAN MATHAN MELA 2025</h2>
+      <h3>✨ Created by GPS AASRAA ARAGHAR DHARMAPUR ✨</h3>
+      
+      <div class="highlight-credit">
+        <strong>📚 Students:</strong> VICKY • ADITIYA • PIYUSH • GARIMA • MOHINI
+      </div>
+      
+      <div class="highlight-credit students-list">
+        <strong>👩‍💼 Program Manager:</strong> MRS SHRISHTY ALLY, MRS ANCHAL<br>
+        <strong>🎯 Program Leader :</strong> MRS RUKMANI NAYAK
+      </div>
+      
+      <div class="highlight-credit">
+        <strong>🙏 Special Thanks:</strong> MR. MANOJ PHULERA
+      </div>
+      
+      <div class="highlight-credit">
+        <strong>👩‍🏫 Supporting Teacher:</strong> MRS POOJA MA'AM
+      </div>
+      
+      <div class="highlight-credit">
+        <strong>💻 Technical Support:</strong> SAURABH SINGH
+      </div>
+    </div>
+  </section>
+
+  <!-- BMI Calculator Section -->
+  <section id="bmi-calculator" class="bmi-section">
+    <h2>Children BMI Calculator & Charts (Ages 6-18)</h2>
+    
+    <div class="calculator-container">
+      <div class="input-form">
+        <h3>📊 Calculate BMI</h3>
+        <input type="text" id="studentName" placeholder="Student Name">
+        <select id="gender">
+          <option value="Boy">👦 Boy</option>
+          <option value="Girl">👧 Girl</option>
+        </select>
+        <input type="number" id="age" placeholder="Age (6-18 years)" min="6" max="18">
+        
+        <div class="height-group">
+          <input type="number" id="heightCm" placeholder="Height in cm (eg: 140)" step="0.1">
+          <div class="height-unit-toggle">
+            <button type="button" class="unit-btn active" onclick="switchToCm()">📏 cm</button>
+            <button type="button" class="unit-btn" onclick="switchToMeter()">📐 meters</button>
+          </div>
+          <input type="number" id="heightMeter" placeholder="Height in meters (eg: 1.40)" step="0.01" style="display: none;">
+          <div id="heightDisplay" class="height-display" style="display: none;"></div>
+        </div>
+
+        <input type="number" id="weight" placeholder="Weight (kg)" step="0.1">
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div id="result"></div>
+      </div>
+
+      <div class="chart-container">
+        <h3>📈 BMI Categories Chart</h3>
+        <canvas id="bmiChart" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Boys table upar, girls neeche -->
+    <div class="tables-container">
+      <div class="bmi-table">
+        <h3>👦 Boys BMI Chart (Age 6-18)</h3>
+        <table id="boysTable">
+          <thead>
+            <tr>
+              <th class="age">Age</th>
+              <th class="underweight">Underweight</th>
+              <th class="healthy">Healthy</th>
+              <th class="overweight">Overweight</th>
+              <th class="obese">Obese</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="bmi-table">
+        <h3>👧 Girls BMI Chart (Age 6-18)</h3>
+        <table id="girlsTable">
+          <thead>
+            <tr>
+              <th class="age">Age</th>
+              <th class="underweight">Underweight</th>
+              <th class="healthy">Healthy</th>
+              <th class="overweight">Overweight</th>
+              <th class="obese">Obese</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other sections -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p>Transforming futures, one child at a time: Aasraa Trust is dedicated to nurturing young minds in the heart of the slums, providing them with the tools and opportunities they need to succeed.</p>
+  </section>
+
+  <section id="mission">
+    <h2>Our Sacred Mission</h2>
+    <p>With unwavering commitment, we forge pathways to prosperity by empowering individuals through world-class education, championing health and hygiene excellence, and architecting a compassionate society that radiates dignity and hope for generations to come.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Get In Touch</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px;">
+      <div style="text-align: center; padding: 25px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 18px; box-shadow: 0 10px 22px rgba(76,175,80,0.35);">
+        <i class="fas fa-envelope" style="font-size: 2.4rem; color: #2e7d32; margin-bottom: 15px;"></i>
+        <p><a href="mailto:communication@aasraatrust.org" style="color: #1b5e20; text-decoration: none; font-weight: bold; font-size: 1.05rem;">communication@aasraatrust.org</a></p>
+      </div>
+      <div style="text-align: center; padding: 25px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 18px; box-shadow: 0 10px 22px rgba(33,150,243,0.35);">
+        <i class="fas fa-phone" style="font-size: 2.4rem; color: #1976d2; margin-bottom: 15px;"></i>
+        <p style="font-weight: bold; font-size: 1.1rem;"><a href="tel:+919045056991" style="color: #0d47a1; text-decoration: none;">+91-9045056991</a></p>
+      </div>
+      <div style="text-align: center; padding: 25px; background: linear-gradient(135deg, #fff3e0, #ffccbc); border-radius: 18px; box-shadow: 0 10px 22px rgba(255,152,0,0.4);">
+        <i class="fas fa-map-marker-alt" style="font-size: 2.4rem; color: #fb8c00; margin-bottom: 15px;"></i>
+        <p style="font-weight: 500; line-height: 1.6;">Skillibility Center<br>Nalapani Road<br>Opposite Rajiv Gandhi Navodaya Vidyalaya<br>Dehradun</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 AASRAA TRUST | GPS Araghar Dehradun | All Rights Reserved | Healthy Children, Bright Future</p>
+  </footer>
+
+  <script>
+    function switchToCm() {
+      document.getElementById('heightCm').style.display = 'block';
+      document.getElementById('heightMeter').style.display = 'none';
+      document.querySelector('.unit-btn:nth-child(1)').classList.add('active');
+      document.querySelector('.unit-btn:nth-child(2)').classList.remove('active');
+      document.getElementById('heightDisplay').style.display = 'none';
+    }
+
+    function switchToMeter() {
+      document.getElementById('heightCm').style.display = 'none';
+      document.getElementById('heightMeter').style.display = 'block';
+      document.querySelector('.unit-btn:nth-child(1)').classList.remove('active');
+      document.querySelector('.unit-btn:nth-child(2)').classList.add('active');
+      document.getElementById('heightDisplay').style.display = 'none';
+    }
+
+    function updateHeightDisplay() {
+      const cmInput = document.getElementById('heightCm');
+      const meterInput = document.getElementById('heightMeter');
+      const display = document.getElementById('heightDisplay');
+      
+      if (cmInput.style.display !== 'none' && cmInput.value) {
+        const cm = parseFloat(cmInput.value);
+        const meters = (cm / 100).toFixed(2);
+        display.textContent = `${cm} cm = ${meters} m`;
+        display.style.display = 'block';
+      } else if (meterInput.style.display !== 'none' && meterInput.value) {
+        const meters = parseFloat(meterInput.value);
+        const cm = (meters * 100).toFixed(1);
+        display.textContent = `${meters} m = ${cm} cm`;
+        display.style.display = 'block';
+      }
+    }
+
+    const boysData = {
+      6:{under:13.1,healthyLow:13.2,healthyHigh:18.8,overLow:18.9,overHigh:21.4,obese:21.5},
+      7:{under:13.3,healthyLow:13.4,healthyHigh:19.8,overLow:19.9,overHigh:23.0,obese:23.1},
+      8:{under:13.6,healthyLow:13.7,healthyHigh:20.9,overLow:21.0,overHigh:24.6,obese:24.7},
+      9:{under:13.8,healthyLow:13.9,healthyHigh:21.8,overLow:21.9,overHigh:26.0,obese:26.1},
+      10:{under:14.1,healthyLow:14.2,healthyHigh:22.7,overLow:22.8,overHigh:27.3,obese:27.4},
+      11:{under:14.5,healthyLow:14.6,healthyHigh:23.6,overLow:23.7,overHigh:28.3,obese:28.4},
+      12:{under:14.8,healthyLow:14.9,healthyHigh:24.3,overLow:24.4,overHigh:29.2,obese:29.3},
+      13:{under:15.1,healthyLow:15.2,healthyHigh:25.0,overLow:25.1,overHigh:30.0,obese:30.1},
+      14:{under:15.4,healthyLow:15.5,healthyHigh:25.5,overLow:25.6,overHigh:30.6,obese:30.7},
+      15:{under:15.8,healthyLow:15.9,healthyHigh:26.1,overLow:26.2,overHigh:31.2,obese:31.3},
+      16:{under:16.1,healthyLow:16.2,healthyHigh:26.5,overLow:26.6,overHigh:31.7,obese:31.8},
+      17:{under:16.3,healthyLow:16.4,healthyHigh:27.0,overLow:27.1,overHigh:32.1,obese:32.2},
+      18:{under:16.6,healthyLow:16.7,healthyHigh:27.4,overLow:27.5,overHigh:32.4,obese:32.5}
+    };
+
+    const girlsData = {
+      6:{under:12.8,healthyLow:12.9,healthyHigh:18.3,overLow:18.4,overHigh:20.5,obese:20.6},
+      7:{under:13.1,healthyLow:13.2,healthyHigh:19.1,overLow:19.2,overHigh:21.8,obese:21.9},
+      8:{under:13.4,healthyLow:13.5,healthyHigh:20.1,overLow:20.2,overHigh:23.1,obese:23.2},
+      9:{under:13.7,healthyLow:13.8,healthyHigh:21.0,overLow:21.1,overHigh:24.4,obese:24.5},
+      10:{under:14.1,healthyLow:14.2,healthyHigh:21.9,overLow:22.0,overHigh:25.6,obese:25.7},
+      11:{under:14.4,healthyLow:14.5,healthyHigh:22.7,overLow:22.8,overHigh:26.6,obese:26.7},
+      12:{under:14.8,healthyLow:14.9,healthyHigh:23.4,overLow:23.5,overHigh:27.5,obese:27.6},
+      13:{under:15.2,healthyLow:15.3,healthyHigh:24.0,overLow:24.1,overHigh:28.3,obese:28.4},
+      14:{under:15.5,healthyLow:15.6,healthyHigh:24.6,overLow:24.7,overHigh:28.9,obese:29.0},
+      15:{under:15.8,healthyLow:15.9,healthyHigh:25.0,overLow:25.1,overHigh:29.4,obese:29.5},
+      16:{under:16.1,healthyLow:16.2,healthyHigh:25.4,overLow:25.5,overHigh:29.7,obese:29.8},
+      17:{under:16.3,healthyLow:16.4,healthyHigh:25.7,overLow:25.8,overHigh:30.0,obese:30.1},
+      18:{under:16.5,healthyLow:16.6,healthyHigh:25.9,overLow:26.0,overHigh:30.3,obese:30.4}
+    };
+
+    function populateTables() {
+      const boysTbody = document.querySelector('#boysTable tbody');
+      const girlsTbody = document.querySelector('#girlsTable tbody');
+
+      for (let age = 6; age <= 18; age++) {
+        const b = boysData[age];
+        const g = girlsData[age];
+
+        const boysRow = boysTbody.insertRow();
+        boysRow.innerHTML = `
+          <td class="age">${age}</td>
+          <td class="underweight">≤ ${b.under}</td>
+          <td class="healthy">${b.healthyLow} – ${b.healthyHigh}</td>
+          <td class="overweight">${b.overLow} – ${b.overHigh}</td>
+          <td class="obese">≥ ${b.obese}</td>
+        `;
+
+        const girlsRow = girlsTbody.insertRow();
+        girlsRow.innerHTML = `
+          <td class="age">${age}</td>
+          <td class="underweight">≤ ${g.under}</td>
+          <td class="healthy">${g.healthyLow} – ${g.healthyHigh}</td>
+          <td class="overweight">${g.overLow} – ${g.overHigh}</td>
+          <td class="obese">≥ ${g.obese}</td>
+        `;
+      }
+    }
+
+    function calculateBMI() {
+      const name = document.getElementById("studentName").value || "Student";
+      const gender = document.getElementById("gender").value;
+      const age = parseInt(document.getElementById("age").value);
+      const heightCmInput = parseFloat(document.getElementById("heightCm").value);
+      const heightMeterInput = parseFloat(document.getElementById("heightMeter").value);
+      const weight = parseFloat(document.getElementById("weight").value);
+
+      if (!age || (!heightCmInput && !heightMeterInput) || !weight) {
+        document.getElementById("result").innerHTML = "❌ Please fill all fields correctly.";
+        return;
+      }
+
+      let heightM;
+      if (heightCmInput) {
+        heightM = heightCmInput / 100;
+      } else {
+        heightM = heightMeterInput;
+      }
+
+      const bmi = (weight / (heightM * heightM)).toFixed(1);
+      const heightDisplay = heightCmInput ? `${heightCmInput} cm` : `${heightMeterInput} m`;
+
+      const data = gender === "Boy" ? boysData[age] : girlsData[age];
+      let category = "Healthy Weight", colorClass = "healthy";
+
+      if (bmi <= data.under) {
+        category = "Underweight";
+        colorClass = "underweight";
+      } else if (bmi >= data.healthyLow && bmi <= data.healthyHigh) {
+        category = "Healthy Weight";
+        colorClass = "healthy";
+      } else if (bmi >= data.overLow && bmi <= data.overHigh) {
+        category = "Overweight";
+        colorClass = "overweight";
+      } else if (bmi >= data.obese) {
+        category = "Obese";
+        colorClass = "obese";
+      }
+
+      const colorMap = {
+        underweight: '#0277bd',
+        healthy: '#2e7d32',
+        overweight: '#ef6c00',
+        obese: '#c62828'
+      };
+
+      document.getElementById("result").innerHTML = `
+        <div style="color: #283593; font-size: 1.15rem; margin-bottom: 10px;">
+          👤 ${name} (${gender}, ${age} years)
+        </div>
+        📏 Height: ${heightDisplay} | ⚖️ Weight: ${weight} kg<br>
+        📊 BMI: <strong>${bmi}</strong><br>
+        🏷️ <span style="color: ${colorMap[colorClass]}">${category}</span>
+      `;
+    }
+
+    document.getElementById('heightCm').addEventListener('input', updateHeightDisplay);
+    document.getElementById('heightMeter').addEventListener('input', updateHeightDisplay);
+
+    const ctx = document.getElementById('bmiChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['6y', '9y', '12y', '15y', '18y'],
+        datasets: [{
+          label: 'Boys Healthy BMI Range',
+          data: [16, 17.8, 19.6, 21, 22],
+          backgroundColor: 'rgba(66,165,245,0.85)'
+        }, {
+          label: 'Girls Healthy BMI Range',
+          data: [15.6, 17.4, 19.1, 20.4, 21.2],
+          backgroundColor: 'rgba(255,112,67,0.85)'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: { display: true, text: 'Average Healthy BMI by Age', color: '#283593', font: { size: 16 } },
+          legend: { labels: { color: '#37474f' } }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { color: '#455a64' } },
+          x: { ticks: { color: '#455a64' } }
+        }
+      }
+    });
+
+    populateTables();
+  </script>
+</body>
+</html>
