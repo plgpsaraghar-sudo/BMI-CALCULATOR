@@ -408,7 +408,7 @@
 <body>
   <header>
     <h1 class="logo">AASRAA TRUST</h1>
-    <div class="subheading">GPS Araghar Dehradun | Gyan Mathan Mela 2025</div>
+    <div class="subheading">GPS Araghar Dehradun | Gyan Manthan Mela 2025</div>
     <p>
       <i class="fas fa-heart" style="color: #ffeb3b; margin-right: 15px;"></i>
       Children BMI Chart & Calculator | Healthy Growth Tracking
@@ -425,8 +425,8 @@
   <!-- Credits Section -->
   <section class="credits-section">
     <div class="credits">
-      <h2>🏆 GYAN MATHAN MELA 2025</h2>
-      <h3>✨ Created by GPS AASRAA ARAGHAR DHARMAPUR ✨</h3>
+      <h2>🏆 GYAN MANTHAN MELA 2025</h2>
+      <h3>✨ Created by GPS AASRAA ARAGHAR DHARMPUR ✨</h3>
       
       <div class="highlight-credit">
         <strong>📚 Students:</strong> RISHOO  • ADITIYA • PIYUSH • VICKY
@@ -672,17 +672,17 @@ We aim to educate boys and girls about BMI so they can grow healthier, stronger,
       const heightDisplay = heightCmInput ? `${heightCmInput} cm` : `${heightMeterInput} m`;
 
       const data = gender === "Boy" ? boysData[age] : girlsData[age];
-      let category = "Healthy Weight", colorClass = "healthy";
+      let category = "Healthy Weight", colorClass = "Healthy";
 
       if (bmi <= data.under) {
         category = "Underweight";
-        colorClass = "underweight";
+        colorClass = "Underweight";
       } else if (bmi >= data.healthyLow && bmi <= data.healthyHigh) {
         category = "Healthy Weight";
-        colorClass = "healthy";
+        colorClass = "Healthy";
       } else if (bmi >= data.overLow && bmi <= data.overHigh) {
         category = "Overweight";
-        colorClass = "overweight";
+        colorClass = "Overweight";
       } else if (bmi >= data.obese) {
         category = "Obese";
         colorClass = "obese";
@@ -740,5 +740,6 @@ We aim to educate boys and girls about BMI so they can grow healthier, stronger,
   </script>
 </body>
 </html>
+
 
 
